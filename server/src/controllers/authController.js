@@ -1,4 +1,4 @@
-const jwt= require("jsonwebtoken");
+const generateTokenAndSetCookie= require("../utils/generateToken");
 const bcrypt=require("bcryptjs");
 const User= require("../models/User");
 
@@ -23,22 +23,8 @@ const registerUser = async (req,res) =>  {
             password: hashedPassword,
             role
         });
-        const token=jwt.sign(
-            {
-                userId: user._id,
-                role: user.role,
-            },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-            }
-        );
-        res.cookie("token",token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite:"lax",
-            maxAge: 7*24*60*60*1000,
-        });
+        generateTokenAndSetCookie(user,res);
+        
         return res.status(201).json({
             success:true,
             message:"User is registered successfully.",
@@ -63,6 +49,48 @@ const registerUser = async (req,res) =>  {
     
 };
 
+const loginUser= async (req,res) => {
+    try{
+        const{email,password}=req.body;
+        const user = await User.findOne({ email});
+        if(!user){
+            return res.status(401).json({
+                success:false,
+                message: "Invalid email or password",
+            });
+        }
+        const isPasswordMatched = await bcrypt.compare(
+            password,
+            user.password
+        );
+        if(!isPasswordMatched){
+            return res.status(401).json({
+                success:false,
+                message: "Invalid email or password",
+            });
+        }
+        generateTokenAndSetCookie(user,res);
+        return res.status(200).json({
+            success: true,
+            message: "Login successful.",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+        });
+    
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({
+            success:false,
+            message: "Internal Server Error",
+        });
+    }
+};
+
 module.exports={
-    registerUser
+    registerUser,
+    loginUser,
 };
