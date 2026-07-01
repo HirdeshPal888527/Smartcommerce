@@ -4,7 +4,8 @@ const asyncHandler = require("../utils/asyncHandler");
 const placeOrder =  asyncHandler(async(req,res)=>{
     const order= await orderService.placeOrder(
         req.user.userId,
-        req.body.shippingAddress
+        req.body.shippingAddress,
+        req.body.paymentMethod
     );
 
     return res.status(201).json({

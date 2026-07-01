@@ -4,7 +4,7 @@ const Product= require("../models/Product");
 const AppError= require("../utils/AppError");
 
 
-const placeOrder= async(userId,shippingAddress) =>{
+const placeOrder= async(userId,shippingAddress,paymentMethod="COD") =>{
     const cart = await Cart.findOne({
         user: userId,
     }).populate("items.product");
@@ -54,6 +54,7 @@ const placeOrder= async(userId,shippingAddress) =>{
         items: orderItems,
         shippingAddress,
         totalAmount,
+        paymentMethod,
     });
 
     // Clear Cart

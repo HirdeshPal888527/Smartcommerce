@@ -114,6 +114,21 @@ const orderSchema = new mongoose.Schema(
             ],
             default:"Pending",
         },
+
+        paymentMethod: {
+            type: String,
+            enum: ["COD", "ONLINE"],
+            default: "COD",
+        },
+
+        transactionId: {
+            type: String,
+        },
+
+        paidAt: {
+            type: Date,
+        },
+
     },
     {
         timestamps: true,
