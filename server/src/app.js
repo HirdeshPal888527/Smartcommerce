@@ -5,11 +5,13 @@ const cartRoutes = require("./routes/cartRoutes");
 const uploadRoutes= require("./routes/uploadRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 
 
 const errorMiddleware=require("./middlewares/errorMiddleware")
 const protect=require("./middlewares/authMiddleware");
+
 const app = express();
 
 
@@ -22,6 +24,7 @@ app.use("/api/products",productRoutes);
 app.use("/api/upload",uploadRoutes);
 app.use("/api/cart",cartRoutes);
 app.use("/api/auth",authRoutes);
+app.use("/api/orders",orderRoutes);
 
 
 

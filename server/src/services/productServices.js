@@ -6,3 +6,6 @@ const createProduct= async(productData)=>{
     return product;
 };
 
+module. exports ={
+    createProduct,
+};
