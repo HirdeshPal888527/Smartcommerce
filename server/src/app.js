@@ -1,7 +1,7 @@
 const express = require("express");
 const cookieParser= require("cookie-parser");
 
-
+const adminRoutes = require("./routes/adminRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -31,6 +31,7 @@ app.use("/api/orders",orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/seller", sellerRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 

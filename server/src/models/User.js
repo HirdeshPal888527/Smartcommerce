@@ -27,6 +27,10 @@ const userSchema=new mongoose.Schema(
             enum: ["buyer","seller","admin"],
             default:"buyer",
         },
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
     },
     {
         timestamps: true,
