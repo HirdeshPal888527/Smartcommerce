@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser= require("cookie-parser");
 
 
+const sellerRoutes = require("./routes/sellerRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const uploadRoutes= require("./routes/uploadRoutes");
@@ -29,6 +30,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/orders",orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/seller", sellerRoutes);
 
 
 
