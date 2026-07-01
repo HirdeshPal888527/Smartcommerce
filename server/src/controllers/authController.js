@@ -1,18 +1,18 @@
 const generateTokenAndSetCookie= require("../utils/generateToken");
 const bcrypt=require("bcryptjs");
-const User= require("../models/User");
 
-const registerUser = async (req,res) =>  {
-    try{
+
+const User= require("../models/User");
+const asyncHandler=require("../utils/asyncHandler");
+const AppError= require("../utils/AppError");
+
+const registerUser = asyncHandler(async (req,res) =>  {
         const{name,email,password,role}=req.body;
 
         const existingUser= await User.findOne({email});
 
         if(existingUser){
-            return res.status(400).json({
-                success: false,
-                message:"Email already registered."
-            });
+            throw new AppError("Email already registered.",400);
         }
 
 
@@ -34,40 +34,21 @@ const registerUser = async (req,res) =>  {
                 email:user.email,
                 role:user.role
             }
-        })
-
-
-    } catch(error){
-        console.error(error);
-        
-        return res.status(500).json({
-            success: false,
-            message:"Internal Sever Error"
         });
-    }
+});
 
-    
-};
-
-const loginUser= async (req,res) => {
-    try{
+const loginUser= asyncHandler(async (req,res) => {
         const{email,password}=req.body;
         const user = await User.findOne({ email});
         if(!user){
-            return res.status(401).json({
-                success:false,
-                message: "Invalid email or password",
-            });
+            throw new AppError("Invalid email or password",401);
         }
         const isPasswordMatched = await bcrypt.compare(
             password,
             user.password
         );
         if(!isPasswordMatched){
-            return res.status(401).json({
-                success:false,
-                message: "Invalid email or password",
-            });
+            throw new AppError("Invalid email or password",401);
         }
         generateTokenAndSetCookie(user,res);
         return res.status(200).json({
@@ -80,15 +61,7 @@ const loginUser= async (req,res) => {
                 role: user.role,
             },
         });
-    
-    }catch(error){
-        console.error(error);
-        return res.status(500).json({
-            success:false,
-            message: "Internal Server Error",
-        });
-    }
-};
+});
 
 module.exports={
     registerUser,

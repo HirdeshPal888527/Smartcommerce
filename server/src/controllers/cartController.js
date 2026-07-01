@@ -1,7 +1,7 @@
 const cartService= require("../services/cartServices");
+const asyncHandler=require("../utils/asyncHandler");
 
-const addToCart= async(req,res)=>{
-    try{
+const addToCart=asyncHandler(async(req,res)=>{
         const{productId,quantity}= req.body;
 
         const cart = await cartService.addToCart(
@@ -15,18 +15,10 @@ const addToCart= async(req,res)=>{
             message:"Product added to cart successfully.",
             cart,
         });
-    }catch(error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success:false,
-            message:"Internal Server Error"
-        });
-    }
-};
-
-const getCart = async(req,res)=>{
-    try{
+const getCart = asyncHandler(async(req,res)=>{
         const cart = await cartService.getCart(req.user.userId);
 
         return res.status(200).json({
@@ -34,18 +26,10 @@ const getCart = async(req,res)=>{
             cart,
         });
 
-    }catch(error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success: false,
-            message:"Internal Server Error",
-        });
-    }
-};
-
-const updateCartItem = async(req,res)=>{
-    try{
+const updateCartItem = asyncHandler(async(req,res)=>{
         const{quantity}= req.body;
 
         const cart = await cartService.updateCartItem(
@@ -58,19 +42,9 @@ const updateCartItem = async(req,res)=>{
             message:"Cart updated Successfully.",
             cart
         })
-    }catch(error){
-        console.error(error);
+});
 
-        return res.status(500).json({
-            success: true,
-            message:"Internal Server Error",
-        });
-
-    }
-};
-
-const removeCartItem = async(req,res)=>{
-    try{
+const removeCartItem = asyncHandler(async(req,res)=>{
         const  cart= await cartService.removeCartItem(
             req.user.userId,
             req.params.productId,
@@ -81,18 +55,10 @@ const removeCartItem = async(req,res)=>{
             message:"Product removed from cart.",
             cart,
         });
-    }catch(error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success:false,
-            message:"Internal Server Error"
-        })
-    }
-}
-
-const clearCart=async(req,res)=>{
-    try{
+const clearCart=asyncHandler(async(req,res)=>{
         const cart = await cartService.clearCart(req.user.userId);
 
         return res.status(200).json({
@@ -100,15 +66,7 @@ const clearCart=async(req,res)=>{
             message:"Cart cleared successfully.",
             cart,
         });
-    } catch(error){
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            message:"Internal Server Error"
-        });
-    }
-};
+});
 
 module.exports ={
     addToCart,

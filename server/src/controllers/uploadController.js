@@ -1,12 +1,14 @@
 const cloudinary=require("../config/cloudinary");
 const streamifier= require("streamifier")
-const uploadImage = async (req,res)=> {
-    try{
+
+
+const AppError=require("../utils/AppError");
+const asyncHandler=require("../utils/asyncHandler");
+
+
+const uploadImage =asyncHandler(async (req,res)=> {
         if(!req.file){
-            return res.status(400).json({
-                success: false,
-                message: "Please upload an image."
-            })
+            throw new AppError("Please upload an image.",400);
         }
 
         const result = await new Promise((resolve,reject)=>{
@@ -32,15 +34,8 @@ const uploadImage = async (req,res)=> {
             },
         });
 
-    }catch(error){
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
+    
+});
 
 module.exports= {
     uploadImage,

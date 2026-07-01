@@ -5,6 +5,10 @@ const cartRoutes = require("./routes/cartRoutes");
 const uploadRoutes= require("./routes/uploadRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+
+
+
+const errorMiddleware=require("./middlewares/errorMiddleware")
 const protect=require("./middlewares/authMiddleware");
 const app = express();
 
@@ -12,9 +16,14 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+
 app.use("/api/products",productRoutes);
 app.use("/api/upload",uploadRoutes);
 app.use("/api/cart",cartRoutes);
+app.use("/api/auth",authRoutes);
+
+
 
 app.get("/", (req, res) => {
     res.json({
@@ -29,6 +38,7 @@ app.get("/api/profile",protect,(req,res)=>{
     });
 });
 
-app.use("/api/auth",authRoutes);
+app.use(errorMiddleware);
+
 
 module.exports = app;

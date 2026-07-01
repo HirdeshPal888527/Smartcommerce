@@ -1,8 +1,9 @@
 const Product= require("../models/Product");
 const productServices= require("../services/productServices");
+const asyncHandler= require("../utils/asyncHandler");
+const AppError= require("../utils/AppError");
 
-const createProduct= async (req,res) => {
-    try{
+const createProduct= asyncHandler(async (req,res) => {
         const{
             name,
             description,
@@ -36,18 +37,10 @@ const createProduct= async (req,res) => {
             product,
         });
 
-    }catch (error) {
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
-
-const getAllProducts = async (req,res)=> {
-    try{
+const getAllProducts =asyncHandler (async (req,res)=> {
         const products = await Product.find({
             isActive:true,
         });
@@ -58,59 +51,35 @@ const getAllProducts = async (req,res)=> {
             products,
 
         })
-    } catch (error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
-
-const getProductById = async(req,res) => {
-    try{
+const getProductById = asyncHandler(async(req,res) => {
         const product = await Product.findById(req.params.id);
         if(!product || !product.isActive){
-            return res.status(404).json({
-                success: false,
-                message: "Product not found.",
-            });
+            throw new AppError("Product not found.",404);
         }
         return res.status(200).json({
             success: true,
             product,
         });
 
-    }catch(error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
-
-const UpdateProduct= async(req,res) => {
-    try{
+const UpdateProduct=asyncHandler(async(req,res) => {
         const product= await Product.findById(req.params.id);
 
         if(!product){
-            return res.status(404).json({
-                success: false,
-                message: "Product not found."
-            });
+            throw new AppError("Product not found.",404);
+
         }
 
         if(
             req.user.role!== "admin" &&
             product.seller.toString()!==req.user.userId
         ){
-            return res.status(403).json({
-                success: false,
-                message: " You are not authorized to update this product."
-            });
+            throw new AppError("You are not authorized to update this product.",403);
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(
@@ -127,36 +96,22 @@ const UpdateProduct= async(req,res) => {
             message:"Product updates successfully.",
             product: updatedProduct,
         })
-    }catch (error){
-        console.error(error);
+    
+});
 
-        return res.status(500).json({
-            success: false,
-            message:"Internal Server Error",
-        });
-
-    }
-};
-
-const deleteProduct = async(req,res) => {
-    try{
+const deleteProduct = asyncHandler(async(req,res) => {
         const product =  await Product.findById(req.params.id);
 
         if(!product){
-            return res.status(404).json({
-                success: false,
-                message: "Product not found."
-            })
+            throw new AppError("Product not found.",404);
+            
         }
         
         const isAdmin = req.user.role==="admin";
         const isOwner = product.seller.toString() === req.user.userId;
 
         if(!isAdmin && !isOwner){
-            return res.status(403).json({
-                success: false,
-                message:"You are not authorized to delete this product.",
-            })
+            throw new AppError("You are not authorized to delete this product.",403);
         }
 
         product.isActive=false;
@@ -166,15 +121,8 @@ const deleteProduct = async(req,res) => {
             success: true,
             message: "Product deleted successfully."
         })
-    }catch(error){
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            message:"Internal Server Error",
-        });
-    }
-};
+    
+});
 
 module.exports= {
     createProduct,

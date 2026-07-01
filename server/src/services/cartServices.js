@@ -1,11 +1,12 @@
 const Cart=require("../models/Cart");
 const Product= require("../models/Product");
+const AppError = require("../utils/AppError");
 
 const getCartOrThrow = async(userId)=>{
     const cart = await Cart.findOne({user:userId});
 
     if(!cart){
-        throw new Error("Cart not found.");
+        throw new AppError("Cart not found.",404);
     }
     return cart;
 } 
@@ -13,19 +14,19 @@ const getCartOrThrow = async(userId)=>{
 const addToCart= async(userId,productId,quantity=1)=>{
     quantity=Number(quantity);
     if(Number.isNaN(quantity) ||  quantity<1){
-        throw new Error("Quantity must be positive number.");
+        throw new AppError("Quantity must be positive number.",400);
     }
     const product=await Product.findById(productId);
 
     if(!product || !product.isActive){
-        throw new Error("Product not found.");
+        throw new AppError("Product not found.",404);
     }
     if(product.stock===0){
-        throw new Error("Product is out of stock.")
+        throw new AppError("Product is out of stock.",404)
     }
 
     if(quantity>product.stock){
-        throw new Error("Requested quantity exceeds available stock.");
+        throw new AppError("Requested quantity exceeds available stock.",400);
     }
 
     let cart = await Cart.findOne({user:userId});
@@ -44,7 +45,7 @@ const addToCart= async(userId,productId,quantity=1)=>{
         const newQuantity = existingItem.quantity + quantity;
 
         if(newQuantity > product.stock){
-            throw new Error("Requested quantity exceeds available stock.")
+            throw new AppError("Requested quantity exceeds available stock.",400)
         }
         
         existingItem.quantity = newQuantity;
@@ -80,7 +81,7 @@ const updateCartItem= async(userId, productId,quantity)=>{
     quantity=Number(quantity);
 
     if(Number.isNaN(quantity) || quantity<0){
-        throw new Error("Quantity must be zero or a positive number.");
+        throw new AppError("Quantity must be zero or a positive number.",400);
     }
 
     const cart = await getCartOrThrow(userId);
@@ -90,7 +91,7 @@ const updateCartItem= async(userId, productId,quantity)=>{
     );
 
     if(!item){
-        throw new Error("Product not found in cart")
+        throw new AppError("Product not found in cart",404);
     }
 
     if(quantity === 0){
@@ -105,11 +106,11 @@ const updateCartItem= async(userId, productId,quantity)=>{
     const product = await Product.findById(productId);
 
     if(!product || !product.isActive){
-        throw new Error("Product not found.");
+        throw new AppError("Product not found.",404);
     }
 
     if(quantity >  product.stock){
-        throw new Error("Requested quantity exceeds available stock.");
+        throw new AppError("Requested quantity exceeds available stock.",400);
     }
 
     item.quantity = quantity;
@@ -128,7 +129,7 @@ const removeCartItem = async(userId, productId)=>{
     );
 
     if(!itemExists){
-        throw new Error("Product not found in cart.");
+        throw new AppError("Product not found in cart.",404);
     }
 
     cart.items = cart.items.filter(
