@@ -6,7 +6,7 @@ const uploadRoutes= require("./routes/uploadRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
-
+const wishlistRoutes = require("./routes/wishlistRoutes");
 
 
 const errorMiddleware=require("./middlewares/errorMiddleware")
@@ -25,6 +25,7 @@ app.use("/api/upload",uploadRoutes);
 app.use("/api/cart",cartRoutes);
 app.use("/api/auth",authRoutes);
 app.use("/api/orders",orderRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 
 
