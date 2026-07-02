@@ -41,14 +41,13 @@ const createProduct= asyncHandler(async (req,res) => {
 });
 
 const getAllProducts =asyncHandler (async (req,res)=> {
-        const products = await Product.find({
-            isActive:true,
-        });
+        const result = await productServices.getAllProducts(req.query);
+
+        res.set("X-Cache", result.cache);
 
         return res.status(200).json({
             success:true,
-            count: products.length,
-            products,
+            ...result.data,
 
         })
     
@@ -82,13 +81,9 @@ const UpdateProduct=asyncHandler(async(req,res) => {
             throw new AppError("You are not authorized to update this product.",403);
         }
 
-        const updatedProduct = await Product.findByIdAndUpdate(
+        const updatedProduct = await productServices.updateProduct(
             req.params.id,
             req.body,
-            {
-                new: true,
-                runValidators: true,
-            }
         );
 
         return res.status(200).json({
@@ -114,8 +109,7 @@ const deleteProduct = asyncHandler(async(req,res) => {
             throw new AppError("You are not authorized to delete this product.",403);
         }
 
-        product.isActive=false;
-        await product.save();
+        await productServices.deleteProduct(req.params.id);
 
         return res.status(200).json({
             success: true,
