@@ -7,6 +7,7 @@ import useAuthStore from "../../store/authStore";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import AuthLayout from "../../layouts/AuthLayout";
 
 function LoginPage() {
     const [formData, setFormData] = useState({
@@ -39,9 +40,8 @@ function LoginPage() {
 };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-            <Card>
-                <form
+        <AuthLayout>
+            <form
                     onSubmit={handleSubmit}
                     className="space-y-5 w-96"
                 >
@@ -84,8 +84,7 @@ function LoginPage() {
                         </Link>
                     </p>
                 </form>
-            </Card>
-        </div>
+        </AuthLayout>
     );
 }
 
