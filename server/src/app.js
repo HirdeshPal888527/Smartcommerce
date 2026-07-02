@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser= require("cookie-parser");
+const cors = require("cors");
 
 const adminRoutes = require("./routes/adminRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
@@ -17,7 +18,12 @@ const protect=require("./middlewares/authMiddleware");
 
 const app = express();
 
-
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL,
+        credentials: true,
+    })
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -41,12 +47,7 @@ app.get("/", (req, res) => {
         message: "SmartCommerce API is running 🚀"
     });
 });
-app.get("/api/profile",protect,(req,res)=>{
-    res.json({
-        success: true,
-        user: req.user,
-    });
-});
+
 
 app.use(errorMiddleware);
 

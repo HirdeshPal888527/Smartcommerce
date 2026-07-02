@@ -63,7 +63,31 @@ const loginUser= asyncHandler(async (req,res) => {
         });
 });
 
+const logoutUser = asyncHandler(async (req, res) => {
+    res.clearCookie("token");
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out successfully.",
+    });
+});
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.userId).select("-password");
+
+    if (!user) {
+        throw new AppError("User not found.", 404);
+    }
+
+    return res.status(200).json({
+        success: true,
+        user,
+    });
+});
+
 module.exports={
     registerUser,
     loginUser,
+    logoutUser,
+    getCurrentUser,
 };

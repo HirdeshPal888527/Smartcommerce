@@ -1,0 +1,92 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import useAuthStore from "../../store/authStore";
+import Card from "../../components/ui/Card";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/Button";
+
+function LoginPage() {
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+    const navigate = useNavigate();
+
+    const { login, isLoading } = useAuthStore();
+
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const result = await login(formData);
+
+    if (result.success) {
+        toast.success("Login successful!");
+
+        navigate("/");
+    } else {
+        toast.error(result.message);
+    }
+};
+
+    return (
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <Card>
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5 w-96"
+                >
+                    <h1 className="text-3xl font-bold text-center">
+                        Login
+                    </h1>
+
+                    <Input
+                        label="Email"
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
+
+                    <Input
+                        label="Password"
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
+
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Logging in..." : "Login"}
+                    </Button>
+                    <p className="text-center text-sm">
+                        Don't have an account?{" "}
+                        <Link
+                            to="/register"
+                            className="text-green-600 font-medium hover:underline"
+                        >
+                            Register
+                        </Link>
+                    </p>
+                </form>
+            </Card>
+        </div>
+    );
+}
+
+export default LoginPage;
