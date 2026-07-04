@@ -18,7 +18,7 @@ const createProduct= async(productData)=>{
 const getAllProducts = async (query) => {
     // Pagination
     const page = Number(query.page) || 1;
-    const limit = Number(query.limit) || 10;
+    const limit = Number(query.limit) || 2;
     const skip = (page - 1) * limit;
     const cacheKey = `products:${new URLSearchParams(query).toString()}`;
     

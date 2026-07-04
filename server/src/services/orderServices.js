@@ -31,13 +31,15 @@ const placeOrder= async(userId,shippingAddress,paymentMethod="COD") =>{
             );
         }
 
-        totalAmount += product.price * item.quantity;
+        const sellingPrice =
+            product.discountPrice || product.price;
 
+        totalAmount += sellingPrice * item.quantity;
         orderItems.push({
             product: product._id,
             name: product.name,
             image: product.images[0]?.url || "",
-            price: product.price,
+            price: sellingPrice,
             quantity: item.quantity,
         });
     }

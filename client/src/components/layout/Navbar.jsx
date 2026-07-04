@@ -44,6 +44,7 @@ function Navbar() {
                     <NavLink to="/products" className={navLinkClass}>
                         Products
                     </NavLink>
+          
 
                     {!isAuthenticated ? (
                         <>
@@ -76,12 +77,34 @@ function Navbar() {
                             )}
 
                             {user?.role === "buyer" && (
-                                <NavLink
-                                    to="/profile"
-                                    className={navLinkClass}
-                                >
-                                    Profile
-                                </NavLink>
+                                <>
+                                    <NavLink
+                                        to="/wishlist"
+                                        className={navLinkClass}
+                                    >
+                                        Wishlist
+                                    </NavLink>
+
+                                    <NavLink
+                                        to="/cart"
+                                        className={navLinkClass}
+                                    >
+                                        Cart
+                                    </NavLink>
+                                    <NavLink
+                                        to="/orders"
+                                        className={navLinkClass}
+                                    >
+                                        Orders
+                                    </NavLink>
+
+                                    <NavLink
+                                        to="/profile"
+                                        className={navLinkClass}
+                                    >
+                                        Profile
+                                    </NavLink>
+                                </>
                             )}
 
                             <button
