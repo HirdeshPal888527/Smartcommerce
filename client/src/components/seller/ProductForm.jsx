@@ -21,6 +21,20 @@ function ProductForm({
             initialData.specifications || {},
         variants: initialData.variants || [],
     });
+    const [specifications, setSpecifications] = useState(
+        Object.entries(initialData.specifications || {}).map(
+            ([key, value]) => ({
+                key,
+                value,
+            })
+        )
+    );
+    const [variants, setVariants] = useState(
+        (initialData.variants || []).map((variant) => ({
+            name: variant.name || "",
+            value: variant.value || "",
+        }))
+    );
 
     const [uploadedImage, setUploadedImage] =
         useState(
@@ -68,6 +82,63 @@ function ProductForm({
         }
     };
 
+    const handleSpecificationChange = (
+        index,
+        field,
+        value
+    ) => {
+        const updated = [...specifications];
+
+        updated[index][field] = value;
+
+        setSpecifications(updated);
+    };
+
+    const addSpecification = () => {
+        setSpecifications([
+            ...specifications,
+            {
+                key: "",
+                value: "",
+            },
+        ]);
+    };
+
+    const removeSpecification = (index) => {
+        setSpecifications(
+            specifications.filter(
+                (_, i) => i !== index
+            )
+        );
+    };
+    const handleVariantChange = (
+        index,
+        field,
+        value
+    ) => {
+        const updated = [...variants];
+
+        updated[index][field] = value;
+
+        setVariants(updated);
+    };
+
+    const addVariant = () => {
+        setVariants([
+            ...variants,
+            {
+                name: "",
+                value: "",
+            },
+        ]);
+    };
+
+    const removeVariant = (index) => {
+        setVariants(
+            variants.filter((_, i) => i !== index)
+        );
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -81,6 +152,15 @@ function ProductForm({
         try {
             setIsSubmitting(true);
 
+            const specificationObject = {};
+
+            specifications.forEach((item) => {
+                if (item.key.trim()) {
+                    specificationObject[item.key] =
+                        item.value;
+                }
+            });
+
             await onSubmit({
                 ...formData,
                 price: Number(formData.price),
@@ -88,6 +168,10 @@ function ProductForm({
                     formData.discountPrice
                 ),
                 stock: Number(formData.stock),
+                specifications: specificationObject,
+                variants: variants.filter(
+                    (variant) => variant.name.trim()
+                ),
                 images: [uploadedImage],
             });
         } finally {
@@ -206,6 +290,140 @@ function ProductForm({
                         required
                     />
                 </div>
+            </div>
+
+            <div>
+
+                <div className="flex justify-between items-center mb-4">
+
+                    <label className="font-medium">
+                        Specifications
+                    </label>
+
+                    <button
+                        type="button"
+                        onClick={addSpecification}
+                        className="rounded bg-green-600 px-3 py-2 text-white"
+                    >
+                        + Add
+                    </button>
+
+                </div>
+
+                {specifications.map((spec, index) => (
+
+                    <div
+                        key={index}
+                        className="grid grid-cols-12 gap-3 mb-3"
+                    >
+
+                        <input
+                            className="col-span-5 rounded border p-3"
+                            placeholder="Key"
+                            value={spec.key}
+                            onChange={(e) =>
+                                handleSpecificationChange(
+                                    index,
+                                    "key",
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <input
+                            className="col-span-5 rounded border p-3"
+                            placeholder="Value"
+                            value={spec.value}
+                            onChange={(e) =>
+                                handleSpecificationChange(
+                                    index,
+                                    "value",
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                removeSpecification(index)
+                            }
+                            className="rounded bg-red-500 text-white"
+                        >
+                            ✕
+                        </button>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+            <div className="mt-8">
+
+                <div className="flex justify-between items-center mb-4">
+
+                    <label className="font-medium">
+                        Variants
+                    </label>
+
+                    <button
+                        type="button"
+                        onClick={addVariant}
+                        className="rounded bg-blue-600 px-3 py-2 text-white"
+                    >
+                        + Add
+                    </button>
+
+                </div>
+
+                {variants.map((variant, index) => (
+
+                    <div
+                        key={index}
+                        className="grid grid-cols-12 gap-3 mb-3"
+                    >
+
+                        <input
+                            className="col-span-5 rounded border p-3"
+                            placeholder="Variant Name"
+                            value={variant.name}
+                            onChange={(e) =>
+                                handleVariantChange(
+                                    index,
+                                    "name",
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <input
+                            className="col-span-5 rounded border p-3"
+                            placeholder="Variant Value"
+                            value={variant.value}
+                            onChange={(e) =>
+                                handleVariantChange(
+                                    index,
+                                    "value",
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                removeVariant(index)
+                            }
+                            className="rounded bg-red-500 text-white"
+                        >
+                            ✕
+                        </button>
+
+                    </div>
+
+                ))}
+
             </div>
 
             <div>

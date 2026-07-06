@@ -1,6 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
+
 import MainLayout from "../layouts/MainLayout";
+import SellerLayout from "../layouts/SellerLayout";
+import AdminLayout from "../layouts/AdminLayout";
+
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import Products from "../pages/customer/ProductPage";
@@ -88,56 +92,64 @@ export default function AppRoutes() {
                 path="/checkout"
                 element={<CheckoutPage />}
             />
-            <Route
-                path="/seller/dashboard"
-                element={<Dashboard />}
-            />
 
-            <Route
-                path="/seller/products"
-                element={<SellerProducts />}
-            />
+            <Route element={<SellerLayout />}>
 
-            <Route
-                path="/seller/products/add"
-                element={<AddProducts />}
-            />
- 
-            <Route
-                path="/seller/products/edit/:id"
-                element={<EditProducts />}
-            />
-            
+                <Route
+                    path="/seller/dashboard"
+                    element={<Dashboard />}
+                />
 
-            <Route
-                path="/seller/orders"
-                element={<Orders />}
-            />
+                <Route
+                    path="/seller/products"
+                    element={<SellerProducts />}
+                />
 
-            <Route
-                path="/seller/analytics"
-                element={<Analytics />}
-            /> 
+                <Route
+                    path="/seller/products/add"
+                    element={<AddProducts />}
+                />
 
-            <Route
-                path="/admin/dashboard"
-                element={<AdminDashboard />}
-            />
+                <Route
+                    path="/seller/products/edit/:id"
+                    element={<EditProducts />}
+                />
 
-            <Route
-                path="/admin/users"
-                element={<AdminUsers />}
-            />
+                <Route
+                    path="/seller/orders"
+                    element={<Orders />}
+                />
 
-            <Route
-                path="/admin/products"
-                element={<AdminProducts />}
-            />
+                <Route
+                    path="/seller/analytics"
+                    element={<Analytics />}
+                />
 
-            <Route
-                path="/admin/orders"
-                element={<AdminOrders />}
-            /> 
+            </Route> 
+
+            <Route element={<AdminLayout />}>
+
+                <Route
+                    path="/admin/dashboard"
+                    element={<AdminDashboard />}
+                />
+
+                <Route
+                    path="/admin/users"
+                    element={<AdminUsers />}
+                />
+
+                <Route
+                    path="/admin/products"
+                    element={<AdminProducts />}
+                />
+
+                <Route
+                    path="/admin/orders"
+                    element={<AdminOrders />}
+                />
+
+            </Route> 
             
 
             <Route path="*" element={<NotFound />} />
