@@ -5,6 +5,7 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import Products from "../pages/customer/ProductPage";
 import DevPage from "../pages/dev/DevPage";
+
 import ProductDetailsPage from "../pages/customer/ProductDetailsPage";
 import CartPage from "../pages/customer/CartPage";
 import WishlistPage from "../pages/customer/WishlistPage";
@@ -13,12 +14,18 @@ import OrdersPage from "../pages/customer/OrdersPage";
 import OrderDetailsPage from "../pages/customer/OrderDetailsPage";
 import CheckoutPage from "../pages/customer/CheckoutPage";
 import HomePage from "../pages/customer/HomePage";
+
 import Dashboard from "../pages/seller/Dashboard";
 import SellerProducts from "../pages/seller/Products";
 import AddProducts from "../pages/seller/AddProducts";
 import EditProducts from "../pages/seller/EditProducts";
 import Orders from "../pages/seller/Orders";
 import Analytics from "../pages/seller/Analytics";
+
+import AdminDashboard from "../pages/admin/Dashboard";
+import AdminUsers from "../pages/admin/Users";
+import AdminProducts from "../pages/admin/Products";
+import AdminOrders from "../pages/admin/Orders";
 
 
 // function Home() {
@@ -110,6 +117,26 @@ export default function AppRoutes() {
             <Route
                 path="/seller/analytics"
                 element={<Analytics />}
+            /> 
+
+            <Route
+                path="/admin/dashboard"
+                element={<AdminDashboard />}
+            />
+
+            <Route
+                path="/admin/users"
+                element={<AdminUsers />}
+            />
+
+            <Route
+                path="/admin/products"
+                element={<AdminProducts />}
+            />
+
+            <Route
+                path="/admin/orders"
+                element={<AdminOrders />}
             /> 
             
 
