@@ -1,8 +1,11 @@
 const client = require("../config/meilisearch");
 const Product = require("../models/Product");
 
+const isEnabled = process.env.ENABLE_MEILISEARCH === "true";
 
 const indexProduct = async (product) => {
+    if(!isEnabled) return;
+    
     const index = client.index("products");
 
     await index.addDocuments([
@@ -21,6 +24,7 @@ const indexProduct = async (product) => {
 
 
 const updateProduct = async (product) => {
+    if(!isEnabled) return;
     const index = client.index("products");
 
     await index.addDocuments([
@@ -38,12 +42,15 @@ const updateProduct = async (product) => {
 };
 
 const deleteProduct = async (productId) => {
+    if(!isEnabled) return;
     const index = client.index("products");
 
     await index.deleteDocument(productId.toString());
 };
 
 const syncProductsToMeili = async () => {
+    if(!isEnabled) return;
+    
     const index = client.index("products");
 
     const products = await Product.find({ isActive: true }).lean();
@@ -65,6 +72,9 @@ const syncProductsToMeili = async () => {
 };
 
 const searchProducts = async (keyword) => {
+    if(!isEnabled) {
+        return [];
+    }
     const index = client.index("products");
 
     const results = await index.search(keyword);
