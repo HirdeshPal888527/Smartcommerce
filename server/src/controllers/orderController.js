@@ -51,10 +51,34 @@ const cancelOrder = asyncHandler(async (req, res) => {
         order,
     });
 });
+const getSellerOrders = asyncHandler(async (req, res) => {
+    const orders = await orderService.getSellerOrders(
+        req.user.userId
+    );
 
+    return res.status(200).json({
+        success: true,
+        count: orders.length,
+        orders,
+    });
+});
+
+const getSellerAnalytics = asyncHandler(async (req, res) => {
+    const analytics =
+        await orderService.getSellerAnalytics(
+            req.user.userId
+        );
+
+    return res.status(200).json({
+        success: true,
+        analytics,
+    });
+});
 module.exports = {
     placeOrder,
     getMyOrders,
     getOrderById,
     cancelOrder,
+    getSellerOrders,
+    getSellerAnalytics,
 };

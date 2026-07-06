@@ -11,10 +11,18 @@ const{
     getProductById,
     UpdateProduct,
     deleteProduct,
+    getMyProducts,
 }= require("../controllers/productController");
 
 
 router.get("/",getAllProducts);
+
+router.get(
+    "/my-products",
+    protect,
+    authorize("seller"),
+    getMyProducts
+);
 router.get("/:id",getProductById);
 router.put(
     "/:id",

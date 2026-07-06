@@ -134,9 +134,68 @@ const cancelOrder = async (userId, role, orderId) => {
     return order;
 };
 
+const getSellerOrders = async (sellerId) => {
+    const orders = await Order.find().populate({
+        path: "items.product",
+        select: "seller",
+    });
+
+    const sellerOrders = orders.filter((order) =>
+        order.items.some(
+            (item) =>
+                item.product &&
+                item.product.seller.toString() === sellerId
+        )
+    );
+
+    return sellerOrders;
+};
+
+const getSellerAnalytics = async (sellerId) => {
+    const orders = await Order.find().populate({
+        path: "items.product",
+        select: "seller",
+    });
+
+    let totalOrders = 0;
+    let totalRevenue = 0;
+    let totalProductsSold = 0;
+
+    for (const order of orders) {
+        for (const item of order.items) {
+            if (
+                item.product &&
+                item.product.seller.toString() === sellerId
+            ) {
+                totalOrders++;
+
+                totalProductsSold += item.quantity;
+
+                totalRevenue +=
+                    item.price * item.quantity;
+            }
+        }
+    }
+
+    const totalProducts =
+        await Product.countDocuments({
+            seller: sellerId,
+            isActive: true,
+        });
+
+    return {
+        totalProducts,
+        totalOrders,
+        totalProductsSold,
+        totalRevenue,
+    };
+};
+
 module.exports = {
     placeOrder,
     getMyOrders,
     getOrderById,
     cancelOrder,
+    getSellerOrders,
+    getSellerAnalytics,
 };

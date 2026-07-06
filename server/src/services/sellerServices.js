@@ -1,3 +1,6 @@
+
+const mongoose = require("mongoose");
+
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 
@@ -31,7 +34,7 @@ const getMyOrders = async (sellerId) => {
         },
         {
             $match: {
-                "product.seller": sellerId,
+                "product.seller": new mongoose.Types.ObjectId(sellerId),
             },
         },
         {
@@ -109,7 +112,7 @@ const getAnalytics = async (sellerId) => {
         },
         {
             $match: {
-                "product.seller": sellerId,
+                "product.seller": new mongoose.Types.ObjectId(sellerId),
             },
         },
         {

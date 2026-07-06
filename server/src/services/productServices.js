@@ -162,9 +162,21 @@ const deleteProduct = async (productId) => {
     return product;
 };
 
+const getMyProducts = async (sellerId) => {
+    const products = await Product.find({
+        seller: sellerId,
+        isActive: true,
+    }).sort({
+        createdAt: -1,
+    });
+
+    return products;
+};
+
 module. exports ={
     createProduct,
     getAllProducts,
     updateProduct,
     deleteProduct,
+    getMyProducts,
 };

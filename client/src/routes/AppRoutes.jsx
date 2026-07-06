@@ -13,6 +13,12 @@ import OrdersPage from "../pages/customer/OrdersPage";
 import OrderDetailsPage from "../pages/customer/OrderDetailsPage";
 import CheckoutPage from "../pages/customer/CheckoutPage";
 import HomePage from "../pages/customer/HomePage";
+import Dashboard from "../pages/seller/Dashboard";
+import SellerProducts from "../pages/seller/Products";
+import AddProducts from "../pages/seller/AddProducts";
+import EditProducts from "../pages/seller/EditProducts";
+import Orders from "../pages/seller/Orders";
+import Analytics from "../pages/seller/Analytics";
 
 
 // function Home() {
@@ -75,6 +81,36 @@ export default function AppRoutes() {
                 path="/checkout"
                 element={<CheckoutPage />}
             />
+            <Route
+                path="/seller/dashboard"
+                element={<Dashboard />}
+            />
+
+            <Route
+                path="/seller/products"
+                element={<SellerProducts />}
+            />
+
+            <Route
+                path="/seller/products/add"
+                element={<AddProducts />}
+            />
+ 
+            <Route
+                path="/seller/products/edit/:id"
+                element={<EditProducts />}
+            />
+            
+
+            <Route
+                path="/seller/orders"
+                element={<Orders />}
+            />
+
+            <Route
+                path="/seller/analytics"
+                element={<Analytics />}
+            /> 
             
 
             <Route path="*" element={<NotFound />} />

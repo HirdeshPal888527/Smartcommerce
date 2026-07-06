@@ -118,10 +118,23 @@ const deleteProduct = asyncHandler(async(req,res) => {
     
 });
 
+const getMyProducts = asyncHandler(async (req, res) => {
+    const products = await productServices.getMyProducts(
+        req.user.userId
+    );
+
+    return res.status(200).json({
+        success: true,
+        count: products.length,
+        products,
+    });
+});
+
 module.exports= {
     createProduct,
     getAllProducts,
     getProductById,
     UpdateProduct,
     deleteProduct,
+    getMyProducts,
 }
